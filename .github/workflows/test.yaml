@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Set environment variables
         run: |
-          source ci-configs/envs/dev/test.txt
+          source test-repo-compulse360/ci-configs/envs/dev/test.txt
           echo "Namespace=${VITE_APPLICATION_TYPE}"
           echo "::set-env name=NAMESPACE::${VITE_APPLICATION_TYPE}"
       - name: Print environment variables
