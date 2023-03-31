@@ -1,20 +1,18 @@
-name: Test renaming directory structure
-
+name: Example Workflow
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
-  test_docker_app:
+  my-job:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Load environment variables 
-      run: | 
-          source ci-configs/envs/dev/.build-env 
-    
-    - name: Set Namespace variable 
-      run: echo "::set-env name=NAMESPACE::${VITE_APPLICATION_TYPE}"
+      - name: Set environment variables
+        run: |
+          source ci-configs/envs/dev/.build-env
+          echo "Namespace=${VITE_APPLICATION_TYPE}"
+          echo "::set-env name=NAMESPACE::${VITE_APPLICATION_TYPE}"
+      - name: Print environment variables
+        run: |
+          echo "Namespace=${NAMESPACE}"
