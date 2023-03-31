@@ -11,3 +11,10 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+
+    - name: Load environment variables 
+      run: | 
+          source ci-configs/envs/dev/.build-env 
+    
+    - name: Set Namespace variable 
+      run: echo "::set-env name=NAMESPACE::${VITE_APPLICATION_TYPE}"
