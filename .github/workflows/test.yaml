@@ -1,0 +1,13 @@
+name: Test renaming directory structure
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test_docker_app:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
