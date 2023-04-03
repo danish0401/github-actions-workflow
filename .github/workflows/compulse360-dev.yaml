@@ -17,7 +17,7 @@ env:
   
 jobs:
   preparing:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     outputs:
       ENVIRONMENTS: ${{ steps.set-outputs.outputs.ENVIRONMENTS }}
       NAMESPACES: ${{ steps.set-outputs.outputs.NAMESPACES }}
