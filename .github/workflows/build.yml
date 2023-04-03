@@ -39,5 +39,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: My step
-        run: echo "My namespace is ${{ inputs.namespace }}"
-        run: echo "My Env is ${{ inputs.environment }}"
+        run: echo "My namespace is ${{ inputs.namespace }} and environment is ${{ inputs.environment }}"
