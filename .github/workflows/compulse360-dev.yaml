@@ -28,6 +28,7 @@ jobs:
   build:
     needs: [preparing]
     strategy:
+      max-parallel: 1
       matrix:
         environment: ${{ fromJSON(needs.preparing.outputs.ENVIRONMENTS) }}
         namespace: ${{ fromJSON(needs.preparing.outputs.NAMESPACES) }}
