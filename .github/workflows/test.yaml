@@ -1,18 +1,21 @@
 name: My Workflow
 on:
   workflow_dispatch:
+    inputs:
+      namespaces:
+        type: string
+        description: Namespaces for deploy
+        default: '["admanager-sbg","admanager-lpp"]'
+        required: true
 
   push:
     branches: [main]
 
 env:
-  NAMESPACES: ${{ matrix.namespace }}
+  NAMESPACES: ${{ inputs.namespaces }}
 jobs:
   my-job:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        namespace: [sbg, 360i]
     steps:
       - name: My step
         run: echo "My namespace is ${{ env.NAMESPACES }}"
