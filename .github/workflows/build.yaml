@@ -1,0 +1,43 @@
+name: Ad manager build reusable workflow
+on:
+  workflow_call:
+    inputs:
+      namespace:
+        type: string
+        description: Namespaces for build
+        required: true
+      environment:
+        type: string
+        description: Environment for build
+        required: true
+      tags:
+        type: string
+        description: Tags for build
+    outputs:
+      status:
+        description: "Status of the flow"
+        value: ${{ jobs.build.result }}
+
+  workflow_dispatch:
+    inputs:
+      namespace:
+        type: string
+        description: Namespaces for build
+        default: admanager-0
+        required: true
+      environment:
+        type: string
+        description: Environment for build
+        default: dev
+        required: true
+env:
+  ECR_REGISTRY: '681420559112.dkr.ecr.us-east-1.amazonaws.com'
+  REGION: us-east-1
+  KUBECTL_VERSION: '1.22.13'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: My step
+        run: echo "My namespace is ${{ inputs.namespace }}"
+        run: echo "My Env is ${{ inputs.environment }}"
