@@ -12,7 +12,7 @@ on:
     branches: [main]
 
 env:
-  NAMESPACES: ${{ inputs.namespaces }}
+  NAMESPACES: ${{ inputs.namespaces || '["admanager-sbg","admanager-lpp"]' }}
 jobs:
   my-job:
     runs-on: ubuntu-latest
