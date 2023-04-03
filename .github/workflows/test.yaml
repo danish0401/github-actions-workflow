@@ -8,9 +8,6 @@ on:
         default: '["admanager-sbg","admanager-lpp"]'
         required: true
 
-  push:
-    branches: [main]
-
 env:
   NAMESPACES: ${{ inputs.namespaces || '["admanager-sbg","admanager-lpp"]' }}
 jobs:
