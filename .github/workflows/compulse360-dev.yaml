@@ -5,7 +5,7 @@ on:
     inputs:
       namespaces:
         type: string
-        description: Namespaces for deploy
+        description: Namespaces for deploy dev
         default: '["360i","sbg"]'
         required: true
   push:
