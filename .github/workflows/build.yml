@@ -38,5 +38,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: My step
-        run: echo "My namespace is ${{ inputs.namespace }} and environment is ${{ inputs.environment }}"
+      - name: Checkout repository     
+        uses: actions/checkout@v2
+      - name: cat .build-env for test
+        run: cat ci-configs/envs/${{ inputs.environment }}/${{ inputs.namespace }}/envs/.build-env
