@@ -1,1 +1,37 @@
+name: compulse-360 auto deploy dev
 
+on:
+  workflow_dispatch:
+    inputs:
+      namespaces:
+        type: string
+        description: Namespaces for deploy dev
+        default: '["360i","sbg"]'
+        required: true
+
+env:
+  ENVIRONMENTS: '["prod"]'
+  NAMESPACES: ${{ inputs.namespaces || '["360i","sbg"]' }}
+  
+jobs:
+  preparing:
+    runs-on: ubuntu-latest
+    outputs:
+      ENVIRONMENTS: ${{ steps.set-outputs.outputs.ENVIRONMENTS }}
+      NAMESPACES: ${{ steps.set-outputs.outputs.NAMESPACES }}
+    steps:
+      - id: set-outputs
+        run: |
+          echo "ENVIRONMENTS=${{ toJSON(env.ENVIRONMENTS) }}" >> $GITHUB_OUTPUT
+          echo "NAMESPACES=${{ toJSON(env.NAMESPACES) }}" >> $GITHUB_OUTPUT
+      - run: echo "${{ toJSON(steps.set-outputs.outputs) }}"
+  build:
+    needs: [preparing]
+    strategy:
+      matrix:
+        environment: ${{ fromJSON(needs.preparing.outputs.ENVIRONMENTS) }}
+        namespace: ${{ fromJSON(needs.preparing.outputs.NAMESPACES) }}
+    uses: ./.github/workflows/build.yml
+    with:
+      namespace: ${{ matrix.namespace }}
+      environment: ${{ matrix.environment }}
