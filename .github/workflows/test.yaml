@@ -1,6 +1,12 @@
 name: My Workflow
 on:
   workflow_dispatch:
+
+  push:
+    branches: [main]
+
+env:
+  NAMESPACES: ${{ matrix.namespace }}
 jobs:
   my-job:
     runs-on: ubuntu-latest
@@ -9,4 +15,4 @@ jobs:
         namespace: [sbg, 360i]
     steps:
       - name: My step
-        run: echo "My namespace is ${{ matrix.namespace }}"
+        run: echo "My namespace is ${{ env.NAMESPACES }}"
