@@ -41,4 +41,6 @@ jobs:
       - name: Checkout repository     
         uses: actions/checkout@v2
       - name: cat .build-env for test
-        run: cat ci-configs/envs/${{ inputs.environment }}/${{ inputs.namespace }}/envs/.build-env
+        run: | 
+          cat ci-configs/envs/${{ inputs.environment }}/${{ inputs.namespace }}/envs/.build-env
+          echo "github sha: ${{ github.sha }}"
