@@ -39,7 +39,7 @@ on:
         default: false
         description: Run migrations
 env:
-  ECR_REGISTRY: '681420559112.dkr.ecr.us-east-1.amazonaws.com'
+  ECR_REGISTRY: "489994096722.dkr.ecr.us-east-1.amazonaws.com"
   REGION: us-east-1
   KUBECTL_VERSION: '1.22.13'
 jobs:
@@ -58,7 +58,7 @@ jobs:
 # #     runs-on: self-hosted
 #     env:
 #       HELM_KUBECONTEXT: dev
-#       ECR_REGISTRY: "681420559112.dkr.ecr.us-east-1.amazonaws.com"
+#       ECR_REGISTRY: "489994096722.dkr.ecr.us-east-1.amazonaws.com"
 #       ECR_REPOSITORY: "compulse-360"
 #       HELMFILEPATH: "ci-configs/helm"
 #     steps:
