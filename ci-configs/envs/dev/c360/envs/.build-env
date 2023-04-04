@@ -1,7 +1,7 @@
 #VITE
 VITE_AH_API_URL="https://admin-hierarchy-back.stg.zypmedia.com"
 VITE_AH_URL="https://admin-hierarchy.stg.zypmedia.com"
-VITE_APPLICATION_TYPE=c360
+VITE_APPLICATION_TYPE=C360
 
 # Links
 VITE_DASHBOARD_LINK="https://analytics.compulse360.dev.adportal.io/ahlogin/?token="
