@@ -47,9 +47,6 @@ jobs:
   frontend-build:
     runs-on: ubuntu-latest
 #     runs-on: self-hosted
-    permissions:
-      id-token: write # need this for OIDC
-      contents: read
     env:
       ECR_REGISTRY: "489994096722.dkr.ecr.us-east-1.amazonaws.com"
       ECR_REPOSITORY: "test-compulse-360"
