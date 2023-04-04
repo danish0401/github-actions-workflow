@@ -1,9 +1,9 @@
 ENVIRONMENT: dev
-DEPLOY_APP: compulse-360-ingress
+DEPLOY_APP: sinclair-ingress
 INGRESS:
-  compulse-360-ingress:
-    NAME: compulse-360-ingress
-    NAMESPACE: compulse-360
+  sinclair-ingress:
+    NAME: sinclair-ingress
+    NAMESPACE: sinclair
     ANNOTATIONS: # map with annotations https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/ingress/annotation/
       kubernetes.io/ingress.class: alb
       alb.ingress.kubernetes.io/scheme: internal
@@ -30,6 +30,6 @@ INGRESS:
           pathType: Prefix
           backend:
             service:
-              name: compulse-360
+              name: sinclair
               port:
                 number: 80

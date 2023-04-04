@@ -1,8 +1,8 @@
 ENVIRONMENT: dev
-DEPLOY_APP: compulse-360
+DEPLOY_APP: sinclair
 DEPLOYMENTS:
-  compulse-360:
-    NAME: "compulse-360"
+  sinclair:
+    NAME: "sinclair"
 
 ### You can change environment variables below
     ENV:
@@ -19,11 +19,11 @@ DEPLOYMENTS:
         memory: 512Mi
         cpu: 200m
     PORTS:
-    - name: compulse-360
+    - name: sinclair
       containerPort: 80
       protocol: TCP
     SERVICE_PORTS:
-    - name: compulse-360
+    - name: sinclair
       port: 80
       targetPort: 80
     # START_COMMAND: 
