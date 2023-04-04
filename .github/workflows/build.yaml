@@ -31,7 +31,7 @@ on:
         default: dev
         required: true
 env:
-  ECR_REGISTRY: '681420559112.dkr.ecr.us-east-1.amazonaws.com'
+  ECR_REGISTRY: "489994096722.dkr.ecr.us-east-1.amazonaws.com"
   REGION: us-east-1
   KUBECTL_VERSION: '1.22.13'
 jobs:
@@ -61,7 +61,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
