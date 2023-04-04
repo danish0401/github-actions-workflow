@@ -23,7 +23,7 @@ on:
 #       - develop
 #       - DEVOPS-*
 env:
-  ENVIRONMENTS: '["prod"]'
+  ENVIRONMENTS: '["stg"]'
   NAMESPACES: ${{ inputs.namespaces || '["360i","sbg"]' }}
   ECR_REGISTRY: "489994096722.dkr.ecr.us-east-1.amazonaws.com"
   REGION: us-east-1
