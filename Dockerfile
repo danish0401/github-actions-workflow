@@ -3,8 +3,8 @@ FROM nginx:latest
 ARG ENVIRONMENT
 ARG NAMESPACE
 
-RUN mv ./ci-configs/envs/dev/c360/envs .
-# RUN mv ci-configs/envs/$ENVIRONMENT/.build-env ./.env
+# COPY ./ci-configs/envs/dev/c360/envs/.build-env .
+COPY ci-configs/envs/$ENVIRONMENT/$NAMESPACE/envs/.build-env ./.env
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
