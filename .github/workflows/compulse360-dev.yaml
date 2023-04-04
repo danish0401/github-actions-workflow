@@ -8,13 +8,26 @@ on:
         description: Namespaces for deploy dev
         default: '["360i","sbg"]'
         required: true
-  push:
-    branches:
-      - main
-
+      branch:
+        description: "Define branch name"
+        required: true
+        default: "develop"
+      migrations:
+        type: boolean
+        default: false
+        description: Run migrations
+        
+#   push:
+#     branches:
+#       - main
+#       - develop
+#       - DEVOPS-*
 env:
   ENVIRONMENTS: '["dev"]'
   NAMESPACES: ${{ inputs.namespaces || '["360i","sbg"]' }}
+  ECR_REGISTRY: "681420559112.dkr.ecr.us-east-1.amazonaws.com"
+  REGION: us-east-1
+  KUBECTL_VERSION: "1.22.13"
   
 jobs:
   preparing:
