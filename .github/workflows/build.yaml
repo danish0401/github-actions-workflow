@@ -44,44 +44,44 @@ jobs:
         run: | 
           cat ci-configs/envs/${{ inputs.environment }}/${{ inputs.namespace }}/envs/.build-env
           echo "github sha: ${{ github.sha }}"
-#   frontend-build:
-#     runs-on: ubuntu-latest
-# #     runs-on: self-hosted
-#     env:
-#       ECR_REGISTRY: "681420559112.dkr.ecr.us-east-1.amazonaws.com"
-#       ECR_REPOSITORY: "compulse-360"
-#       DOCKER_FILE: "Dockerfile"
-#       WORKING_DIRECTORY: "./"
-#     defaults:
-#       run:
-#         working-directory: .
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v3
-#         with:
-#           fetch-depth: 0
-#       - name: Configure AWS Credentials
-#         uses: aws-actions/configure-aws-credentials@v2
-#         with:
-#           aws-region: us-east-1
-#       - name: Login to Amazon ECR
-#         id: login-ecr
-#         uses: aws-actions/amazon-ecr-login@v1
-#       - name: Set up Docker Buildx
-#         uses: docker/setup-buildx-action@v2
-#       - name: Build and push
-#         uses: docker/build-push-action@v3
-#         with:
-#           context: ${{ env.WORKING_DIRECTORY }}
-#           file: ${{ env.WORKING_DIRECTORY }}/${{ env.DOCKER_FILE }}
-#           build-args: |
-#             ${{ env.BUILD_ARGS  }}
-#             ENVIRONMENT=${{ inputs.environment }}
-#             NAMESPACE=${{ inputs.namespace }}
-#           push: true
-# #           tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
-#           tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ inputs.namespace }}.${{ inputs.environment }}
-#           cache-from: type=gha,scope=docker-cache-be-${{ hashFiles(format('{0}/**', env.WORKING_DIRECTORY)) }}
-#           cache-to: type=gha,mode=max,scope=docker-cache-be-${{ hashFiles(format('{0}/**', env.WORKING_DIRECTORY)) }}
-#       - name: show images
-#         run: docker images
+  frontend-build:
+    runs-on: ubuntu-latest
+#     runs-on: self-hosted
+    env:
+      ECR_REGISTRY: "489994096722.dkr.ecr.us-east-1.amazonaws.com"
+      ECR_REPOSITORY: "test-compulse-360"
+      DOCKER_FILE: "Dockerfile"
+      WORKING_DIRECTORY: "./"
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: us-east-1
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: ${{ env.WORKING_DIRECTORY }}
+          file: ${{ env.WORKING_DIRECTORY }}/${{ env.DOCKER_FILE }}
+          build-args: |
+            ${{ env.BUILD_ARGS  }}
+            ENVIRONMENT=${{ inputs.environment }}
+            NAMESPACE=${{ inputs.namespace }}
+          push: true
+#           tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+          tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ inputs.namespace }}.${{ inputs.environment }}
+          cache-from: type=gha,scope=docker-cache-be-${{ hashFiles(format('{0}/**', env.WORKING_DIRECTORY)) }}
+          cache-to: type=gha,mode=max,scope=docker-cache-be-${{ hashFiles(format('{0}/**', env.WORKING_DIRECTORY)) }}
+      - name: show images
+        run: docker images
