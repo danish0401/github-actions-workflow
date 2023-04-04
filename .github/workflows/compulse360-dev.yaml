@@ -8,6 +8,9 @@ on:
         description: Namespaces for deploy dev
         default: '["360i","sbg"]'
         required: true
+  push:
+    branches:
+      - main
 
 env:
   ENVIRONMENTS: '["dev"]'
