@@ -25,7 +25,7 @@ on:
 env:
   ENVIRONMENTS: '["dev"]'
   NAMESPACES: ${{ inputs.namespaces || '["360i","sbg"]' }}
-  ECR_REGISTRY: "681420559112.dkr.ecr.us-east-1.amazonaws.com"
+  ECR_REGISTRY: "489994096722.dkr.ecr.us-east-1.amazonaws.com"
   REGION: us-east-1
   KUBECTL_VERSION: "1.22.13"
   
@@ -44,7 +44,7 @@ jobs:
   build:
     needs: [preparing]
     strategy:
-      max-parallel: 1
+      max-parallel: 2
       matrix:
         environment: ${{ fromJSON(needs.preparing.outputs.ENVIRONMENTS) }}
         namespace: ${{ fromJSON(needs.preparing.outputs.NAMESPACES) }}
