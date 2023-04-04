@@ -50,7 +50,7 @@ jobs:
         uses: actions/checkout@v2
       - name: cat .build-env for test
         run: | 
-          cat ci-configs/envs/${{ inputs.environment }}/${{ inputs.namespace }}/envs/.build-env
+          cat ci-configs/helm/${{ inputs.namespace }}/helm/helmfile.yaml
           echo "github sha: ${{ github.sha }}"
           echo "migration: ${{ inputs.migrations }}"
 #   frontend-deployment:
