@@ -34,6 +34,9 @@ env:
   ECR_REGISTRY: "489994096722.dkr.ecr.us-east-1.amazonaws.com"
   REGION: us-east-1
   KUBECTL_VERSION: '1.22.13'
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read  # This is required for actions/checkout
 jobs:
   namespace-test:
     runs-on: ubuntu-latest
