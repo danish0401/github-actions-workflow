@@ -1,4 +1,4 @@
-name: compulse-360 auto deploy dev
+name: compulse360_FE auto deploy dev
 
 on:
   workflow_dispatch:

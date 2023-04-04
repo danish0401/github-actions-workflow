@@ -1,4 +1,4 @@
-name: Ad manager build reusable workflow
+name: Compulse360_FE deployment reusable workflow
 on:
   workflow_call:
     inputs:
