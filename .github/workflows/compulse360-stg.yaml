@@ -1,4 +1,4 @@
-name: compulse-360 auto deploy stg
+name: compulse-360 auto deploy dev
 
 on:
   workflow_dispatch:
@@ -6,12 +6,28 @@ on:
       namespaces:
         type: string
         description: Namespaces for deploy dev
-        default: '["360i","sbg"]'
+        default: '["c360","sbg"]'
         required: true
-
+      branch:
+        description: "Define branch name"
+        required: true
+        default: "develop"
+      migrations:
+        type: boolean
+        default: false
+        description: Run migrations
+        
+#   push:
+#     branches:
+#       - main
+#       - develop
+#       - DEVOPS-*
 env:
   ENVIRONMENTS: '["stg"]'
   NAMESPACES: ${{ inputs.namespaces || '["360i","sbg"]' }}
+  ECR_REGISTRY: "681420559112.dkr.ecr.us-east-1.amazonaws.com"
+  REGION: us-east-1
+  KUBECTL_VERSION: "1.22.13"
   
 jobs:
   preparing:
@@ -28,10 +44,12 @@ jobs:
   build:
     needs: [preparing]
     strategy:
+      max-parallel: 1
       matrix:
         environment: ${{ fromJSON(needs.preparing.outputs.ENVIRONMENTS) }}
         namespace: ${{ fromJSON(needs.preparing.outputs.NAMESPACES) }}
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/deployment.yaml
     with:
       namespace: ${{ matrix.namespace }}
       environment: ${{ matrix.environment }}
+      migrations: ${{ inputs.migrations }}
