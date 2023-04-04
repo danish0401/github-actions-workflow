@@ -3,7 +3,7 @@ FROM nginx:latest
 ARG ENVIRONMENT
 ARG NAMESPACE
 
-RUN mv ci-configs/envs/dev/C360/envs/.build-env ./.env
+RUN mv ci-configs/envs/dev/C360/envs/.build-env .
 # RUN mv ci-configs/envs/$ENVIRONMENT/.build-env ./.env
 
 EXPOSE 80
