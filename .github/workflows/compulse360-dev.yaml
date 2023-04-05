@@ -60,7 +60,7 @@ jobs:
     #   always() &&
     #   !contains(needs.*.result, 'failure') &&
     #   !contains(needs.*.result, 'cancelled')
-    # needs: [preparing, build]
+    needs: [preparing]
     strategy:
       max-parallel: 1
       matrix:
