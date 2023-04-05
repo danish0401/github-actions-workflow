@@ -61,6 +61,8 @@ jobs:
       ECR_REGISTRY: "489994096722.dkr.ecr.us-east-1.amazonaws.com"
       ECR_REPOSITORY: "test-compulse-360"
       HELMFILEPATH: "ci-configs/helm/${{ inputs.namespace }}/helm"
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -110,9 +112,9 @@ jobs:
       #     ls -la
       #     cd ${{ env.HELMFILEPATH }}
       #     helmfile -e ${{ inputs.environment }} diff -set NAMESPACE=${{ inputs.namespace }} -set DOCKER_IMAGE=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ inputs.namespace }}.${{ inputs.environment }} -set MIGRATIONS=${{ fromJson(inputs.migrations || false) }}
-      - name: Helm install ${{ inputs.namespace }}
-        run: |
-          kubectl version
-          kubectl get pods -n kube-system 
-          cd ${{ env.HELMFILEPATH }}
-          helmfile -e ${{ inputs.environment }} sync -set NAMESPACE=${{ inputs.namespace }} -set DOCKER_IMAGE=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ inputs.namespace }}.${{ inputs.environment }} -set MIGRATIONS=${{ fromJson(inputs.migrations || false) }}
+      # - name: Helm install ${{ inputs.namespace }}
+      #   run: |
+      #     kubectl version
+      #     kubectl get pods -n kube-system 
+      #     cd ${{ env.HELMFILEPATH }}
+      #     helmfile -e ${{ inputs.environment }} sync -set NAMESPACE=${{ inputs.namespace }} -set DOCKER_IMAGE=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ inputs.namespace }}.${{ inputs.environment }} -set MIGRATIONS=${{ fromJson(inputs.migrations || false) }}
