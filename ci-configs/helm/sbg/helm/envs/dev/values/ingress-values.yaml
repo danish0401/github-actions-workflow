@@ -3,7 +3,7 @@ DEPLOY_APP: sinclair-ingress
 INGRESS:
   sinclair-ingress:
     NAME: sinclair-ingress
-    NAMESPACE: sinclair
+    NAMESPACE: sbg
     ANNOTATIONS: # map with annotations https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/ingress/annotation/
       kubernetes.io/ingress.class: alb
       alb.ingress.kubernetes.io/scheme: internal

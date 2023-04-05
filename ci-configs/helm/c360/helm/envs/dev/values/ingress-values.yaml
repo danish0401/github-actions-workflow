@@ -3,7 +3,7 @@ DEPLOY_APP: compulse-360-ingress
 INGRESS:
   compulse-360-ingress:
     NAME: compulse-360-ingress
-    NAMESPACE: compulse-360
+    NAMESPACE: c360
     ANNOTATIONS: # map with annotations https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/ingress/annotation/
       kubernetes.io/ingress.class: alb
       alb.ingress.kubernetes.io/scheme: internal
