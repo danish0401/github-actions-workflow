@@ -104,7 +104,7 @@ jobs:
           /usr/local/bin/aws eks --region us-east-1 update-kubeconfig --name ${{ inputs.environment }} --alias ${{ inputs.environment }} 
           kubectl get po -n kube-system 
           kubectl version 
-          /usr/local/bin/aws sts get-caller-identity --profile default
+          /usr/local/bin/aws sts get-caller-identity
       - name: Echo migrations
         run: |
           echo "Run migration ${{ fromJson(inputs.migrations || false) }}"
