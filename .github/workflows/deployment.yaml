@@ -41,7 +41,7 @@ on:
 env:
   ECR_REGISTRY: "489994096722.dkr.ecr.us-east-1.amazonaws.com"
   REGION: us-east-1
-  KUBECTL_VERSION: '1.22.13'
+  KUBECTL_VERSION: '1.25'
 jobs:
   namespace-test:
     runs-on: ubuntu-latest
