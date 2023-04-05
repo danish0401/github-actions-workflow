@@ -7,13 +7,13 @@ repositories:
 environments:
   dev:
     values:
-      - namespace: compulse-360
+      - namespace: c360
   stg:
     values:
-      - namespace: compulse-360
+      - namespace: c360
   prod:
     values:
-      - namespace: compulse-360
+      - namespace: c360
 
 releases:
   - name: compulse-360
