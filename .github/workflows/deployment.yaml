@@ -114,6 +114,7 @@ jobs:
           pwd
           cd ${{ env.HELMFILEPATH }}
           ls -la
+          aws ecr get-login-password      --region us-east-1 | helm registry login      --username AWS      --password-stdin 489994096722.dkr.ecr.us-east-1.amazonaws.com
           helmfile -e ${{ inputs.environment }} diff -set NAMESPACE=${{ inputs.namespace }} -set DOCKER_IMAGE=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ inputs.namespace }}.${{ inputs.environment }} -set MIGRATIONS=${{ fromJson(inputs.migrations || false) }}
       - name: Helm install ${{ inputs.namespace }}
         run: |
