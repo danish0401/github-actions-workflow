@@ -7,13 +7,13 @@ repositories:
 environments:
   dev:
     values:
-      - namespace: sinclair
+      - namespace: sbg
   stg:
     values:
-      - namespace: sinclair
+      - namespace: sbg
   prod:
     values:
-      - namespace: sinclair
+      - namespace: sbg
 
 releases:
   - name: sinclair

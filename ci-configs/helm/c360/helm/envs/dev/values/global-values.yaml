@@ -1,6 +1,6 @@
 ### You can change environment variables below
 GLOBAL:
   ENVIRONMENT: "dev"
-  NAMESPACE: "compulse-360"
+  NAMESPACE: "c360"
   KUBE_NAMESPACE: "compulse-360"
   PORT: 80
