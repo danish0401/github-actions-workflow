@@ -62,8 +62,6 @@ jobs:
       ECR_REGISTRY: "489994096722.dkr.ecr.us-east-1.amazonaws.com"
       ECR_REPOSITORY: "test-compulse-360"
       HELMFILEPATH: "ci-configs/helm/${{ inputs.namespace }}/helm"
-      # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -101,10 +99,7 @@ jobs:
           helm plugin install https://github.com/jkroepke/helm-secrets --version v3.12.0
       - name: Upgrade kube config
         run: |
-          /usr/local/bin/aws eks --region us-east-1 update-kubeconfig --name ${{ inputs.environment }} --alias ${{ inputs.environment }} 
-          kubectl get po -n kube-system 
-          kubectl version 
-          /usr/local/bin/aws sts get-caller-identity
+          aws eks --region us-east-1 update-kubeconfig --name ${{ inputs.environment }} --alias ${{ inputs.environment }}
       - name: Echo migrations
         run: |
           echo "Run migration ${{ fromJson(inputs.migrations || false) }}"
@@ -113,12 +108,10 @@ jobs:
         run: |
           pwd
           cd ${{ env.HELMFILEPATH }}
-          ls -la
-          aws ecr get-login-password      --region us-east-1 | helm registry login      --username AWS      --password-stdin 489994096722.dkr.ecr.us-east-1.amazonaws.com
+          aws ecr get-login-password --region us-east-1 | helm registry login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
           helmfile -e ${{ inputs.environment }} diff -set NAMESPACE=${{ inputs.namespace }} -set DOCKER_IMAGE=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ inputs.namespace }}.${{ inputs.environment }} -set MIGRATIONS=${{ fromJson(inputs.migrations || false) }}
       - name: Helm install ${{ inputs.namespace }}
         run: |
-          kubectl version
-          kubectl get pods -n kube-system 
           cd ${{ env.HELMFILEPATH }}
+          aws ecr get-login-password --region us-east-1 | helm registry login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
           helmfile -e ${{ inputs.environment }} sync -set NAMESPACE=${{ inputs.namespace }} -set DOCKER_IMAGE=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ inputs.namespace }}.${{ inputs.environment }} -set MIGRATIONS=${{ fromJson(inputs.migrations || false) }}
