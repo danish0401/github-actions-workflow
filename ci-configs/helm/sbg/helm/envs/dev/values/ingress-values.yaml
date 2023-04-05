@@ -16,7 +16,7 @@ INGRESS:
       # alb.ingress.kubernetes.io/group.name: internal
       service.beta.kubernetes.io/aws-load-balancer-name: k8s-dev-internal
     RULES:
-    - host: compulse360.dev.adportal.io
+    - host: sinclair.dev.adportal.io
       http:
         paths:
         - path: /
