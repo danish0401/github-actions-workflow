@@ -26,8 +26,8 @@ releases:
     values:
       - envs/{{ .Environment.Name }}/values/compulse-360-values.yaml
       - envs/{{ .Environment.Name }}/values/global-values.yaml
-    secrets:
-      - envs/{{ .Environment.Name }}/secrets.yaml
+    # secrets:
+    #   - envs/{{ .Environment.Name }}/secrets.yaml
   - name: compulse-360-ingress
     namespace: "{{ .Values.namespace }}"
     labels:
