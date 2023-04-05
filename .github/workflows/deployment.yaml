@@ -55,8 +55,8 @@ jobs:
           echo "github sha: ${{ github.sha }}"
           echo "migration: ${{ inputs.migrations }}"
   frontend-deployment:
-    runs-on: ubuntu-latest
-#     runs-on: self-hosted
+    # runs-on: ubuntu-latest
+    runs-on: self-hosted
     env:
       HELM_KUBECONTEXT: ${{ inputs.environment }}
       ECR_REGISTRY: "489994096722.dkr.ecr.us-east-1.amazonaws.com"
