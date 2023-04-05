@@ -109,5 +109,6 @@ jobs:
       #     helmfile -e ${{ inputs.environment }} diff -set NAMESPACE=${{ inputs.namespace }} -set DOCKER_IMAGE=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ inputs.namespace }}.${{ inputs.environment }} -set MIGRATIONS=${{ fromJson(inputs.migrations || false) }}
       - name: Helm install ${{ inputs.namespace }}
         run: |
+          kubectl get pods -n kube-system
           cd ${{ env.HELMFILEPATH }}
           helmfile -e ${{ inputs.environment }} sync -set NAMESPACE=${{ inputs.namespace }} -set DOCKER_IMAGE=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ inputs.namespace }}.${{ inputs.environment }} -set MIGRATIONS=${{ fromJson(inputs.migrations || false) }}
