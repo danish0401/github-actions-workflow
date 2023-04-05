@@ -44,22 +44,22 @@ jobs:
           echo "ENVIRONMENTS=${{ toJSON(env.ENVIRONMENTS) }}" >> $GITHUB_OUTPUT
           echo "NAMESPACES=${{ toJSON(env.NAMESPACES) }}" >> $GITHUB_OUTPUT
       - run: echo "${{ toJSON(steps.set-outputs.outputs) }}"
-  # build:
-  #   needs: [preparing]
-  #   strategy:
-  #     max-parallel: 1
-  #     matrix:
-  #       environment: ${{ fromJSON(needs.preparing.outputs.ENVIRONMENTS) }}
-  #       namespace: ${{ fromJSON(needs.preparing.outputs.NAMESPACES) }}
-  #   uses: ./.github/workflows/build.yaml
-  #   with:
-  #     namespace: ${{ matrix.namespace }}
-  #     environment: ${{ matrix.environment }}
+  build:
+    needs: [preparing]
+    strategy:
+      max-parallel: 1
+      matrix:
+        environment: ${{ fromJSON(needs.preparing.outputs.ENVIRONMENTS) }}
+        namespace: ${{ fromJSON(needs.preparing.outputs.NAMESPACES) }}
+    uses: ./.github/workflows/build.yaml
+    with:
+      namespace: ${{ matrix.namespace }}
+      environment: ${{ matrix.environment }}
   deployment:
-    # if: |
-    #   always() &&
-    #   !contains(needs.*.result, 'failure') &&
-    #   !contains(needs.*.result, 'cancelled')
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
     needs: [preparing]
     strategy:
       max-parallel: 1
