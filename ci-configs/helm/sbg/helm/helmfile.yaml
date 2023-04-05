@@ -1,6 +1,6 @@
 repositories:
   - name: aws
-    url: 681420559112.dkr.ecr.us-east-1.amazonaws.com
+    url: 489994096722.dkr.ecr.us-east-1.amazonaws.com
     username: AWS
     oci: true
 

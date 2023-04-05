@@ -53,55 +53,58 @@ jobs:
           cat ci-configs/helm/${{ inputs.namespace }}/helm/helmfile.yaml
           echo "github sha: ${{ github.sha }}"
           echo "migration: ${{ inputs.migrations }}"
-#   frontend-deployment:
-#     runs-on: ubuntu-latest
-# #     runs-on: self-hosted
-#     env:
-#       HELM_KUBECONTEXT: ${{ inputs.environment }}
-#       ECR_REGISTRY: "489994096722.dkr.ecr.us-east-1.amazonaws.com"
-#       ECR_REPOSITORY: "compulse-360"
-#       HELMFILEPATH: "ci-configs/helm"
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v3
-#         with:
-#           fetch-depth: 0
-#       - name: Configure AWS Credentials
-#         uses: aws-actions/configure-aws-credentials@v2
-#         with:
-#           aws-region: us-east-1
-#       - name: Login to Amazon ECR
-#         id: login-ecr
-#         uses: aws-actions/amazon-ecr-login@v1
-#       - name: Setup helmfile
-#         continue-on-error: true
-#         uses: mamezou-tech/setup-helmfile@v1.0.0
-#         with:
-#           kubectl-version: ${{ env.KUBECTL_VERSION }}
-#           helm-version: v3.8.2
-#       - name: Sops Binary Installer
-#         uses: mdgreenwald/mozilla-sops-action@v1.2.0
-#         with:
-#           version: 3.7.3
-#         id: install-sops
-#       - name: Install the helm secrets plugin
-#         continue-on-error: true
-#         run: |
-#           whereis sops 
-#           helm plugin install https://github.com/jkroepke/helm-secrets --version v3.12.0
-#       - name: Upgrade kube config
-#         run: |
-#           aws eks --region us-east-1 update-kubeconfig --name ${{ inputs.environment }} --alias ${{ inputs.environment }}
-#       - name: Echo migrations
-#         run: |
-#           echo "Run migration ${{ fromJson(inputs.migrations || false) }}"
-#       - name: Helm diff ${{ inputs.namespace }}
-#         run: |
-#           pwd
-#           ls -la
-#           cd ${{ env.HELMFILEPATH }}
-#           helmfile -e ${{ inputs.environment }} diff -set NAMESPACE=${{ inputs.namespace }} -set DOCKER_IMAGE=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ inputs.namespace }}.${{ inputs.environment }} -set MIGRATIONS=${{ fromJson(inputs.migrations || false) }}
-#       - name: Helm install ${{ inputs.namespace }}
-#         run: |
-#           cd ${{ env.HELMFILEPATH }}
-#           helmfile -e ${{ inputs.environment }} sync -set NAMESPACE=${{ inputs.namespace }} -set DOCKER_IMAGE=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ inputs.namespace }}.${{ inputs.environment }} -set MIGRATIONS=${{ fromJson(inputs.migrations || false) }}
+  frontend-deployment:
+    runs-on: ubuntu-latest
+#     runs-on: self-hosted
+    env:
+      HELM_KUBECONTEXT: ${{ inputs.environment }}
+      ECR_REGISTRY: "489994096722.dkr.ecr.us-east-1.amazonaws.com"
+      ECR_REPOSITORY: "test-compulse-360"
+      HELMFILEPATH: "ci-configs/helm/${{ inputs.namespace }}/helm"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::489994096722:role/github-actions-OIDC-Role-C63KQJ2M1GSG
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Setup helmfile
+        continue-on-error: true
+        uses: mamezou-tech/setup-helmfile@v1.0.0
+        with:
+          kubectl-version: ${{ env.KUBECTL_VERSION }}
+          helm-version: v3.8.2
+      - name: Sops Binary Installer
+        uses: mdgreenwald/mozilla-sops-action@v1.2.0
+        with:
+          version: 3.7.3
+        id: install-sops
+      - name: Install the helm secrets plugin
+        continue-on-error: true
+        run: |
+          whereis sops 
+          helm plugin install https://github.com/jkroepke/helm-secrets --version v3.12.0
+      - name: Upgrade kube config
+        run: |
+          aws eks --region us-east-1 update-kubeconfig --name ${{ inputs.environment }} --alias ${{ inputs.environment }}
+      - name: Echo migrations
+        run: |
+          echo "Run migration ${{ fromJson(inputs.migrations || false) }}"
+      - name: Helm diff ${{ inputs.namespace }}
+        run: |
+          pwd
+          ls -la
+          cd ${{ env.HELMFILEPATH }}
+          helmfile -e ${{ inputs.environment }} diff -set NAMESPACE=${{ inputs.namespace }} -set DOCKER_IMAGE=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ inputs.namespace }}.${{ inputs.environment }} -set MIGRATIONS=${{ fromJson(inputs.migrations || false) }}
+      - name: Helm install ${{ inputs.namespace }}
+        run: |
+          cd ${{ env.HELMFILEPATH }}
+          helmfile -e ${{ inputs.environment }} sync -set NAMESPACE=${{ inputs.namespace }} -set DOCKER_IMAGE=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ inputs.namespace }}.${{ inputs.environment }} -set MIGRATIONS=${{ fromJson(inputs.migrations || false) }}
