@@ -101,7 +101,6 @@ jobs:
       - name: Upgrade kube config
         run: |
           aws eks --region us-east-1 update-kubeconfig --name ${{ inputs.environment }} --alias ${{ inputs.environment }}
-          echo "KUBE_CONFIG_DATA=$(cat ~/.kube/config | base64)" >> $GITHUB_ENV
           kubectl get po -n kube-system || echo "got fucked"
           kubectl version || echo "got fucked"
           aws sts get-caller-identity
