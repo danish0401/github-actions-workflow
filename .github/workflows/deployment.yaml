@@ -40,6 +40,7 @@ on:
         description: Run migrations
 env:
   ECR_REGISTRY: "489994096722.dkr.ecr.us-east-1.amazonaws.com"
+  ECR_REPOSITORY: "test-compulse-360"
   REGION: us-east-1
   KUBECTL_VERSION: '1.25'
 jobs:
