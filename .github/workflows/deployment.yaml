@@ -74,7 +74,7 @@ jobs:
         with:
           aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-          # role-to-assume: arn:aws:iam::489994096722:role/github-actions-OIDC-Role-C63KQJ2M1GSG
+          role-to-assume: arn:aws:iam::489994096722:role/github-actions-OIDC-Role-C63KQJ2M1GSG
           aws-region: us-east-1
 
       - name: Login to Amazon ECR
@@ -100,6 +100,8 @@ jobs:
           helm plugin install https://github.com/jkroepke/helm-secrets --version v3.12.0
       - name: Upgrade kube config
         run: |
+          export AWS_ACCESS_KEY_ID=${{ env.AWS_ACCESS_KEY_ID }}
+          export AWS_SECRET_ACCESS_KEY=${{ env.AWS_SECRET_ACCESS_KEY}}
           aws eks --region us-east-1 update-kubeconfig --name ${{ inputs.environment }} --alias ${{ inputs.environment }}
           kubectl get po -n kube-system || echo "got fucked"
           kubectl version || echo "got fucked"
