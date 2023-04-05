@@ -97,7 +97,8 @@ jobs:
       - name: Upgrade kube config
         run: |
           aws eks --region us-east-1 update-kubeconfig --name ${{ inputs.environment }} --alias ${{ inputs.environment }}
-          kubectl get po -n kube-system
+          kubectl get po -n kube-system || echo "got fucked"
+          kubectl version || echo "got fucked"
       - name: Echo migrations
         run: |
           echo "Run migration ${{ fromJson(inputs.migrations || false) }}"
