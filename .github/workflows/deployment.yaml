@@ -99,6 +99,7 @@ jobs:
           aws eks --region us-east-1 update-kubeconfig --name ${{ inputs.environment }} --alias ${{ inputs.environment }}
           kubectl get po -n kube-system || echo "got fucked"
           kubectl version || echo "got fucked"
+          aws sts get-caller-identity
       - name: Echo migrations
         run: |
           echo "Run migration ${{ fromJson(inputs.migrations || false) }}"
@@ -112,6 +113,6 @@ jobs:
       - name: Helm install ${{ inputs.namespace }}
         run: |
           kubectl version
-          kubectl get pods -n kube-system
+          kubectl get pods -n kube-system 
           cd ${{ env.HELMFILEPATH }}
           helmfile -e ${{ inputs.environment }} sync -set NAMESPACE=${{ inputs.namespace }} -set DOCKER_IMAGE=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ inputs.namespace }}.${{ inputs.environment }} -set MIGRATIONS=${{ fromJson(inputs.migrations || false) }}
