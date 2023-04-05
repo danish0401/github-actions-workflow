@@ -101,7 +101,7 @@ jobs:
           helm plugin install https://github.com/jkroepke/helm-secrets --version v3.12.0
       - name: Upgrade kube config
         run: |
-          aws eks --region us-east-1 update-kubeconfig --name ${{ inputs.environment }} --alias ${{ inputs.environment }}
+          /usr/local/bin/aws eks --region us-east-1 update-kubeconfig --name ${{ inputs.environment }} --alias ${{ inputs.environment }}
           kubectl get po -n kube-system || echo "got fucked"
           kubectl version || echo "got fucked"
           aws sts get-caller-identity
