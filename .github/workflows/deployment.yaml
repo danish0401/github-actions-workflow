@@ -102,9 +102,9 @@ jobs:
       - name: Upgrade kube config
         run: |
           /usr/local/bin/aws eks --region us-east-1 update-kubeconfig --name ${{ inputs.environment }} --alias ${{ inputs.environment }} --profile default
-          kubectl get po -n kube-system || echo "got fucked"
-          kubectl version || echo "got fucked"
-          aws sts get-caller-identity
+          kubectl get po -n kube-system 
+          kubectl version 
+          /usr/local/bin/aws sts get-caller-identity --profile default
       - name: Echo migrations
         run: |
           echo "Run migration ${{ fromJson(inputs.migrations || false) }}"
