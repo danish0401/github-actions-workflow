@@ -7,31 +7,31 @@ repositories:
 environments:
   dev:
     values:
-      - namespace: sbg
+      - namespace: compulse-360
   stg:
     values:
-      - namespace: sbg
+      - namespace: compulse-360
   prod:
     values:
-      - namespace: sbg
+      - namespace: compulse-360
 
 releases:
-  - name: sinclair
+  - name: compulse-360
     namespace: "{{ .Values.namespace }}"
     labels:
-      app: sinclair
+      app: compulse-360
     wait: true
     chart: aws/deployments
     version: 1.0.7
     values:
-      - envs/{{ .Environment.Name }}/values/sinclair-values.yaml
+      - envs/{{ .Environment.Name }}/values/compulse-360-values.yaml
       - envs/{{ .Environment.Name }}/values/global-values.yaml
     # secrets:
     #   - envs/{{ .Environment.Name }}/secrets.yaml
-  - name: sinclair-ingress
+  - name: compulse-360-ingress
     namespace: "{{ .Values.namespace }}"
     labels:
-      app: sinclair-ingress
+      app: compulse-360-ingress
     wait: true
     chart: aws/ingress-helm-charts
     version: 1.0.2

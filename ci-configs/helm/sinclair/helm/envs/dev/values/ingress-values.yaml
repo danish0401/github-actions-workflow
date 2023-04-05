@@ -1,9 +1,9 @@
 ENVIRONMENT: dev
-DEPLOY_APP: compulse-360-ingress
+DEPLOY_APP: sinclair-ingress
 INGRESS:
-  compulse-360-ingress:
-    NAME: compulse-360-ingress
-    NAMESPACE: c360
+  sinclair-ingress:
+    NAME: sinclair-ingress
+    NAMESPACE: sinclair
     ANNOTATIONS: # map with annotations https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/ingress/annotation/
       kubernetes.io/ingress.class: alb
       alb.ingress.kubernetes.io/scheme: internal
@@ -16,7 +16,7 @@ INGRESS:
       # alb.ingress.kubernetes.io/group.name: internal
       service.beta.kubernetes.io/aws-load-balancer-name: k8s-dev-internal
     RULES:
-    - host: compulse360.dev.adportal.io
+    - host: sinclair.dev.adportal.io
       http:
         paths:
         - path: /
@@ -30,6 +30,6 @@ INGRESS:
           pathType: Prefix
           backend:
             service:
-              name: compulse-360
+              name: sinclair
               port:
                 number: 80

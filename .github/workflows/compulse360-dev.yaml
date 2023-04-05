@@ -6,7 +6,7 @@ on:
       namespaces:
         type: string
         description: Namespaces for deploy dev
-        default: '["c360","sbg"]'
+        default: '["compulse-360","sinclair"]'
         required: true
       branch:
         description: "Define branch name"
@@ -24,7 +24,7 @@ on:
 #       - DEVOPS-*
 env:
   ENVIRONMENTS: '["dev"]'
-  NAMESPACES: ${{ inputs.namespaces || '["360i","sbg"]' }}
+  NAMESPACES: ${{ inputs.namespaces || '["compulse-360","sinclair"]' }}
   ECR_REGISTRY: "489994096722.dkr.ecr.us-east-1.amazonaws.com"
   REGION: us-east-1
   KUBECTL_VERSION: "1.22.13"

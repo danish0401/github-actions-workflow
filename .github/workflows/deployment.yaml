@@ -27,7 +27,7 @@ on:
       namespace:
         type: string
         description: Namespaces for build
-        default: sbg
+        default: compulse-360
         required: true
       environment:
         type: string
