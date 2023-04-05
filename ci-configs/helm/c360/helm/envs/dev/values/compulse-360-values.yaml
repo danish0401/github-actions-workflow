@@ -32,20 +32,3 @@ DEPLOYMENTS:
     # - -n
     # MIGRATIONS_ARGS:
     # - python manage_custom.py migrate 2>&1
-    LIVENESS_PROBE:
-      httpGet:
-        path: /api/health
-        port: 80
-      initialDelaySeconds: 5
-      timeoutSeconds: 10
-      periodSeconds: 10
-      successThreshold: 1
-      failureThreshold: 10
-    READINESS_PROBE:
-      httpGet:
-        path: /api/health
-        port: 80
-      timeoutSeconds: 10
-      periodSeconds: 5
-      successThreshold: 2
-      failureThreshold: 1
