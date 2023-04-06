@@ -1,0 +1,16 @@
+#VITE
+VITE_AH_API_URL="https://admin-hierarchy-back.stg.zypmedia.com"
+VITE_AH_URL="https://admin-hierarchy.stg.zypmedia.com"
+VITE_APPLICATION_TYPE=C360
+
+# Links
+VITE_DASHBOARD_LINK="https://analytics.compulse360.stg.adportal.io/ahlogin/?token="
+VITE_MEDIA_PLANNER_LINK="https://mediaplanner.stg.zypmedia.com/ahlogin?token="
+VITE_ADMIN_HIERARCHY_LINK="https://admin-hierarchy.stg.zypmedia.com/callbacks/Auth?refresh_token="
+
+# MIXPANEL
+VITE_MIXPANEL_TOKEN=''
+
+# OLD
+# SHEPHERD TOUR KILL SWITCH
+REACT_APP_IS_SHEPHERD_ENABLE=true

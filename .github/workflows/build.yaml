@@ -1,0 +1,82 @@
+name: Compulse360_FE build reusable workflow
+on:
+  workflow_call:
+    inputs:
+      namespace:
+        type: string
+        description: Namespaces for build
+        required: true
+      environment:
+        type: string
+        description: Environment for build
+        required: true
+      tags:
+        type: string
+        description: Tags for build
+    outputs:
+      status:
+        description: "Status of the flow"
+        value: ${{ jobs.build.result }}
+
+  workflow_dispatch:
+    inputs:
+      namespace:
+        type: string
+        description: Namespaces for build
+        default: compulse-360
+        required: true
+      environment:
+        type: string
+        description: Environment for build
+        default: dev
+        required: true
+env:
+  ECR_REGISTRY: "489994096722.dkr.ecr.us-east-1.amazonaws.com"
+  REGION: us-east-1
+  KUBECTL_VERSION: '1.22.13'
+
+jobs:
+  frontend-build:
+    runs-on: ubuntu-latest
+#     runs-on: self-hosted
+    env:
+      ECR_REGISTRY: "489994096722.dkr.ecr.us-east-1.amazonaws.com"
+      ECR_REPOSITORY: "test-compulse-360"
+      DOCKER_FILE: "Dockerfile"
+      WORKING_DIRECTORY: "./"
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::489994096722:role/github-actions-OIDC-Role-C63KQJ2M1GSG
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: ${{ env.WORKING_DIRECTORY }}
+          file: ${{ env.WORKING_DIRECTORY }}/${{ env.DOCKER_FILE }}
+          build-args: |
+            ${{ env.BUILD_ARGS  }}
+            ENVIRONMENT=${{ inputs.environment }}
+            NAMESPACE=${{ inputs.namespace }}
+          push: true
+#           tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+          tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ inputs.namespace }}.${{ inputs.environment }}
+          cache-from: type=gha,scope=docker-cache-be-${{ hashFiles(format('{0}/**', env.WORKING_DIRECTORY)) }}
+          cache-to: type=gha,mode=max,scope=docker-cache-be-${{ hashFiles(format('{0}/**', env.WORKING_DIRECTORY)) }}
+      - name: show images
+        run: docker images

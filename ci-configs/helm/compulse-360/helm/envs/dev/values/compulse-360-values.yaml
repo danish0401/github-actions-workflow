@@ -1,0 +1,34 @@
+ENVIRONMENT: dev
+DEPLOY_APP: compulse-360
+DEPLOYMENTS:
+  compulse-360:
+    NAME: "compulse-360"
+
+### You can change environment variables below
+    ENV:
+      ENVIRONMENT: "{{ .Values.GLOBAL.ENVIRONMENT }}"
+      NAMESPACE: "{{ .Values.GLOBAL.NAMESPACE }}"
+
+### DevOps things below
+    REPLICAS: 2
+    RESOURCES:
+      requests:
+        memory: 256Mi
+        cpu: 100m
+      limits:
+        memory: 512Mi
+        cpu: 200m
+    PORTS:
+    - name: compulse-360
+      containerPort: 80
+      protocol: TCP
+    SERVICE_PORTS:
+    - name: compulse-360
+      port: 80
+      targetPort: 80
+    # START_COMMAND: 
+    # - supervisord
+    # ARGS:
+    # - -n
+    # MIGRATIONS_ARGS:
+    # - python manage_custom.py migrate 2>&1

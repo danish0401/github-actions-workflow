@@ -1,0 +1,73 @@
+name: compulse360_FE auto deploy dev
+
+on:
+  workflow_dispatch:
+    inputs:
+      namespaces:
+        type: string
+        description: Namespaces for deploy dev
+        default: '["compulse-360","sinclair"]'
+        required: true
+      branch:
+        description: "Define branch name"
+        required: true
+        default: "develop"
+      migrations:
+        type: boolean
+        default: false
+        description: Run migrations
+        
+  push:
+    branches:
+      - main
+#       - develop
+#       - DEVOPS-*
+env:
+  ENVIRONMENTS: '["dev"]'
+  NAMESPACES: ${{ inputs.namespaces || '["compulse-360","sinclair"]' }}
+  ECR_REGISTRY: "489994096722.dkr.ecr.us-east-1.amazonaws.com"
+  REGION: us-east-1
+  KUBECTL_VERSION: "1.22.13"
+# permission can be added at job level or workflow level    
+permissions:
+      id-token: write   # This is required for requesting the JWT
+      contents: read    # This is required for actions/checkout
+jobs:
+  preparing:
+    runs-on: ubuntu-latest
+    outputs:
+      ENVIRONMENTS: ${{ steps.set-outputs.outputs.ENVIRONMENTS }}
+      NAMESPACES: ${{ steps.set-outputs.outputs.NAMESPACES }}
+    steps:
+      - id: set-outputs
+        run: |
+          echo "ENVIRONMENTS=${{ toJSON(env.ENVIRONMENTS) }}" >> $GITHUB_OUTPUT
+          echo "NAMESPACES=${{ toJSON(env.NAMESPACES) }}" >> $GITHUB_OUTPUT
+      - run: echo "${{ toJSON(steps.set-outputs.outputs) }}"
+  build:
+    needs: [preparing]
+    strategy:
+      max-parallel: 1
+      matrix:
+        environment: ${{ fromJSON(needs.preparing.outputs.ENVIRONMENTS) }}
+        namespace: ${{ fromJSON(needs.preparing.outputs.NAMESPACES) }}
+    uses: ./.github/workflows/build.yaml
+    with:
+      namespace: ${{ matrix.namespace }}
+      environment: ${{ matrix.environment }}
+  deployment:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    needs: [preparing, build]
+    strategy:
+      max-parallel: 1
+      matrix:
+        environment: ${{ fromJSON(needs.preparing.outputs.ENVIRONMENTS) }}
+        namespace: ${{ fromJSON(needs.preparing.outputs.NAMESPACES) }}
+    uses: ./.github/workflows/deployment.yaml
+    with:
+      namespace: ${{ matrix.namespace }}
+      environment: ${{ matrix.environment }}
+      migrations: ${{ inputs.migrations || false }}

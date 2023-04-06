@@ -1,0 +1,107 @@
+name: Compulse360_FE deployment reusable Workflow
+on:
+  workflow_call:
+    inputs:
+      namespace:
+        type: string
+        description: Namespaces for build
+        required: true
+      environment:
+        type: string
+        description: Environment for build
+        required: true
+      migrations:
+        type: boolean
+        default: false
+        description: Run migrations
+      tags:
+        type: string
+        description: Tags for build
+    outputs:
+      status:
+        description: "Status of the flow"
+        value: ${{ jobs.build.result }}
+
+  workflow_dispatch:
+    inputs:
+      namespace:
+        type: string
+        description: Namespaces for build
+        default: compulse-360
+        required: true
+      environment:
+        type: string
+        description: Environment for build
+        default: dev
+        required: true
+      migrations:
+        type: boolean
+        default: false
+        description: Run migrations
+env:
+  ECR_REGISTRY: "489994096722.dkr.ecr.us-east-1.amazonaws.com"
+  ECR_REPOSITORY: "test-compulse-360"
+  REGION: us-east-1
+  KUBECTL_VERSION: '1.25'
+jobs:
+  frontend-deployment:
+    runs-on: ubuntu-latest
+    # runs-on: self-hosted
+    env:
+      HELM_KUBECONTEXT: ${{ inputs.environment }}
+      ECR_REGISTRY: "489994096722.dkr.ecr.us-east-1.amazonaws.com"
+      ECR_REPOSITORY: "test-compulse-360"
+      HELMFILEPATH: "ci-configs/helm/${{ inputs.namespace }}/helm"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          ## aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          # aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: arn:aws:iam::489994096722:role/github-actions-OIDC-Role-C63KQJ2M1GSG
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Setup helmfile
+        continue-on-error: true
+        uses: mamezou-tech/setup-helmfile@v1.0.0
+        with:
+          kubectl-version: ${{ env.KUBECTL_VERSION }}
+          helm-version: v3.8.2
+      - name: Sops Binary Installer
+        uses: mdgreenwald/mozilla-sops-action@v1.2.0
+        with:
+          version: 3.7.3
+        id: install-sops
+
+      - name: Install the helm secrets plugin
+        continue-on-error: true
+        run: |
+          whereis sops 
+          helm plugin install https://github.com/jkroepke/helm-secrets --version v3.12.0
+      - name: Upgrade kube config
+        run: |
+          aws eks --region us-east-1 update-kubeconfig --name ${{ inputs.environment }} --alias ${{ inputs.environment }}
+      - name: Echo migrations
+        run: |
+          echo "Run migration ${{ fromJson(inputs.migrations || false) }}"
+      
+      - name: Helm diff ${{ inputs.namespace }}
+        run: |
+          pwd
+          cd ${{ env.HELMFILEPATH }}
+          # aws ecr get-login-password --region us-east-1 | helm registry login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
+          helmfile -e ${{ inputs.environment }} diff -set NAMESPACE=${{ inputs.namespace }} -set DOCKER_IMAGE=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ inputs.namespace }}.${{ inputs.environment }} -set MIGRATIONS=${{ fromJson(inputs.migrations || false) }}
+      - name: Helm install ${{ inputs.namespace }}
+        run: |
+          cd ${{ env.HELMFILEPATH }}
+          # aws ecr get-login-password --region us-east-1 | helm registry login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
+          helmfile -e ${{ inputs.environment }} sync -set NAMESPACE=${{ inputs.namespace }} -set DOCKER_IMAGE=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ inputs.namespace }}.${{ inputs.environment }} -set MIGRATIONS=${{ fromJson(inputs.migrations || false) }}
