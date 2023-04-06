@@ -36,15 +36,15 @@ env:
   KUBECTL_VERSION: '1.22.13'
 
 jobs:
-  namespace-test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository     
-        uses: actions/checkout@v2
-      - name: cat .build-env for test
-        run: | 
-          cat ci-configs/envs/${{ inputs.environment }}/${{ inputs.namespace }}/envs/.build-env
-          echo "github sha: ${{ github.sha }}"
+  # namespace-test:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout repository     
+  #       uses: actions/checkout@v2
+  #     - name: cat .build-env for test
+  #       run: | 
+  #         cat ci-configs/envs/${{ inputs.environment }}/${{ inputs.namespace }}/envs/.build-env
+  #         echo "github sha: ${{ github.sha }}"
   frontend-build:
     runs-on: ubuntu-latest
 #     runs-on: self-hosted
