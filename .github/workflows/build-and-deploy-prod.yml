@@ -1,0 +1,118 @@
+name: Compulse-360 Prod deploy
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Define branch name'
+        required: true
+        default: 'develop'
+      migrations:
+        type: boolean
+        default: false
+        description: Run migrations
+  push:
+    branches:
+      - main
+      - DEVOPS-*
+env:
+  NAMESPACE: compulse-360
+  ECR_REGISTRY: '681420559112.dkr.ecr.us-east-1.amazonaws.com'
+  REGION: us-east-1
+  KUBECTL_VERSION: '1.22.13'
+  ENVIRONMENT: prod
+jobs:
+  backend-build:
+    runs-on: self-hosted
+    env:
+      ECR_REGISTRY: '681420559112.dkr.ecr.us-east-1.amazonaws.com'
+      ECR_REPOSITORY: 'compulse-360'
+      DOCKER_FILE: 'Dockerfile'
+      NAMESPACE: compulse-360
+      WORKING_DIRECTORY: './'
+      ENVIRONMENT: prod
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: us-east-1
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: ${{ env.WORKING_DIRECTORY }}
+          file: ${{ env.WORKING_DIRECTORY }}/${{ env.DOCKER_FILE }}
+          build-args: |
+            ${{ env.BUILD_ARGS  }}
+            ENVIRONMENT=${{ env.ENVIRONMENT }}
+          push: true
+          tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+          # tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.NAMESPACE }}.${{ env.ENVIRONMENT }}
+          cache-from: type=gha,scope=docker-cache-be-${{ hashFiles(format('{0}/**', env.WORKING_DIRECTORY)) }}
+          cache-to: type=gha,mode=max,scope=docker-cache-be-${{ hashFiles(format('{0}/**', env.WORKING_DIRECTORY)) }}
+      - name: show images
+        run: docker images
+  backend-deployment:
+    env:
+      ENVIRONMENT: prod
+      HELM_KUBECONTEXT: prod
+      ECR_REGISTRY: '681420559112.dkr.ecr.us-east-1.amazonaws.com'
+      ECR_REPOSITORY: 'compulse-360'
+      HELMFILEPATH: 'ci-configs/helm'
+      NAMESPACE: compulse-360
+    needs: [backend-build]
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: us-east-1
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Setup helmfile
+        continue-on-error: true
+        uses: mamezou-tech/setup-helmfile@v1.0.0
+        with:
+          kubectl-version: ${{ env.KUBECTL_VERSION }}
+          helm-version: v3.8.2
+      - name: Sops Binary Installer
+        uses: mdgreenwald/mozilla-sops-action@v1.2.0
+        with:
+          version: 3.7.3
+        id: install-sops
+      - name: Install the helm secrets plugin
+        continue-on-error: true
+        run: |
+          whereis sops 
+          helm plugin install https://github.com/jkroepke/helm-secrets --version v3.12.0
+      - name: Upgrade kube config
+        run: |
+          aws eks --region us-east-1 update-kubeconfig --name ${{ env.ENVIRONMENT }} --alias ${{ env.ENVIRONMENT }}
+      - name: Echo migrations
+        run: |
+          echo "Run migration ${{ fromJson(inputs.migrations || false) }}"
+      - name: Helm diff ${{ env.NAMESPACE }}
+        run: |
+          pwd
+          ls -la
+          cd ${{ env.HELMFILEPATH }}
+          helmfile -e ${{ env.ENVIRONMENT }} diff -set NAMESPACE=${{ env.NAMESPACE }} -set DOCKER_IMAGE=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:$GITHUB_SHA -set MIGRATIONS=${{ fromJson(inputs.migrations || false) }}
+      - name: Helm install ${{ env.NAMESPACE }}
+        run: |
+          cd ${{ env.HELMFILEPATH }}
+          helmfile -e ${ENVIRONMENT} sync -set NAMESPACE=${{ env.NAMESPACE }} -set DOCKER_IMAGE=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:$GITHUB_SHA -set MIGRATIONS=${{ fromJson(inputs.migrations || false) }}

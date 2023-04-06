@@ -1,0 +1,8 @@
+version: '3'
+services:
+  storybook:
+    ports:
+      - "8086:80"
+    build:
+      context: ../../
+      dockerfile: ./ci-configs/docker-storybook/Dockerfile

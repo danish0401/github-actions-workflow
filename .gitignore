@@ -1,0 +1,29 @@
+
+/node_modules
+/coverage
+/dist
+/build
+npm-debug.log*
+.cache
+.DS_Store
+.idea/*
+.env
+.vscode
+.env.local
+.eslintcache
+yarn-error.log
+
+storybook-static
+
+report.json
+test-report.xml
+
+#webstorm graphql plugin
+.graphqlconfig
+schema.graphql
+
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/

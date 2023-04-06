@@ -1,0 +1,34 @@
+name: Remove old artifacts
+
+on:
+  schedule:
+    # Every day at 1am
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+    inputs:
+      skip_recent:
+        description: "If specified, will keep the given number of recent artifacts"
+        required: false
+        default: 20
+        type: number
+
+
+jobs:
+  remove-old-artifacts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+    - name: Remove old artifacts
+      if: github.event_name == 'workflow_dispatch'
+      uses: c-hive/gha-remove-artifacts@v1
+      with:
+        age: '2 hours' # '<number> <unit>', e.g. 5 days, 2 years, 90 seconds, parsed by Moment.js
+        skip-recent: ${{ github.event.inputs.skip_recent }}
+
+    - name: Remove old artifacts automatically
+      if: github.event_name != 'workflow_dispatch'
+      uses: c-hive/gha-remove-artifacts@v1
+      with:
+        age: '2 hours' # '<number> <unit>', e.g. 5 days, 2 years, 90 seconds, parsed by Moment.js
+        skip-recent: 5

@@ -1,0 +1,6 @@
+### You can change environment variables below
+GLOBAL:
+  ENVIRONMENT: "stg"
+  NAMESPACE: "compulse-360"
+  KUBE_NAMESPACE: "compulse-360"
+  PORT: 80
