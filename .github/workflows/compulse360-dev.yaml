@@ -70,4 +70,4 @@ jobs:
     with:
       namespace: ${{ matrix.namespace }}
       environment: ${{ matrix.environment }}
-      migrations: ${{ inputs.migrations }}
+      migrations: ${{ inputs.migrations || false }}
