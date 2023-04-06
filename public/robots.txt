@@ -1,0 +1,6 @@
+User-agent: *
+Disallow:	/campaigns/
+Disallow:	/ref/
+Disallow:	/registration-confirm/
+Disallow:	/signup
+Disallow:	/report/

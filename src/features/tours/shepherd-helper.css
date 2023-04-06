@@ -1,0 +1,8 @@
+.shepherd-arrow:before {
+  border-left: 1px solid rgb(0 0 0 / 15%);
+  border-bottom: 1px solid rgb(0 0 0 / 15%);
+}
+
+.shepherd__offset-top {
+  inset: 20px auto auto 0 !important;
+}
