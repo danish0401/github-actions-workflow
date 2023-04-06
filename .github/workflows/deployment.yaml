@@ -108,10 +108,10 @@ jobs:
         run: |
           pwd
           cd ${{ env.HELMFILEPATH }}
-          aws ecr get-login-password --region us-east-1 | helm registry login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
+          # aws ecr get-login-password --region us-east-1 | helm registry login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
           helmfile -e ${{ inputs.environment }} diff -set NAMESPACE=${{ inputs.namespace }} -set DOCKER_IMAGE=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ inputs.namespace }}.${{ inputs.environment }} -set MIGRATIONS=${{ fromJson(inputs.migrations || false) }}
       - name: Helm install ${{ inputs.namespace }}
         run: |
           cd ${{ env.HELMFILEPATH }}
-          aws ecr get-login-password --region us-east-1 | helm registry login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
+          # aws ecr get-login-password --region us-east-1 | helm registry login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
           helmfile -e ${{ inputs.environment }} sync -set NAMESPACE=${{ inputs.namespace }} -set DOCKER_IMAGE=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ inputs.namespace }}.${{ inputs.environment }} -set MIGRATIONS=${{ fromJson(inputs.migrations || false) }}
