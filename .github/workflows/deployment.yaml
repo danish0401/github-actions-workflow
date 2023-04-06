@@ -1,4 +1,4 @@
-name: Compulse360_FE deployment reusable workflow
+name: Compulse360_FE deployment reusable Workflow
 on:
   workflow_call:
     inputs:
