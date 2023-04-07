@@ -55,19 +55,19 @@ jobs:
     with:
       namespace: ${{ matrix.namespace }}
       environment: ${{ matrix.environment }}
-  deployment:
-    if: |
-      always() &&
-      !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
-    needs: [preparing, build]
-    strategy:
-      max-parallel: 1
-      matrix:
-        environment: ${{ fromJSON(needs.preparing.outputs.ENVIRONMENTS) }}
-        namespace: ${{ fromJSON(needs.preparing.outputs.NAMESPACES) }}
-    uses: ./.github/workflows/deployment.yaml
-    with:
-      namespace: ${{ matrix.namespace }}
-      environment: ${{ matrix.environment }}
-      migrations: ${{ inputs.migrations || false }}
+  # deployment:
+  #   if: |
+  #     always() &&
+  #     !contains(needs.*.result, 'failure') &&
+  #     !contains(needs.*.result, 'cancelled')
+  #   needs: [preparing, build]
+  #   strategy:
+  #     max-parallel: 1
+  #     matrix:
+  #       environment: ${{ fromJSON(needs.preparing.outputs.ENVIRONMENTS) }}
+  #       namespace: ${{ fromJSON(needs.preparing.outputs.NAMESPACES) }}
+  #   uses: ./.github/workflows/deployment.yaml
+  #   with:
+  #     namespace: ${{ matrix.namespace }}
+  #     environment: ${{ matrix.environment }}
+  #     migrations: ${{ inputs.migrations || false }}
