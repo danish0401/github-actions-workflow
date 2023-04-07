@@ -17,9 +17,9 @@ on:
         default: false
         description: Run migrations
         
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
 #       - develop
 #       - DEVOPS-*
 env:
