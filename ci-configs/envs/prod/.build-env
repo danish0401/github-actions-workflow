@@ -3,8 +3,6 @@ VITE_AH_API_URL="https://admin-hierarchy-back.extend.tv"
 VITE_AH_URL="https://admin-hierarchy.extend.tv"
 VITE_APPLICATION_TYPE=SBG
 
-# Temporary solution while SSO on prod doesn't work
-VITE_SSO_DISABLED = true
 
 # Links
 VITE_DASHBOARD_LINK="https://analytics.compulse360.adportal.io/ahlogin/?token="
