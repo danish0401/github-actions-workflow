@@ -1,0 +1,6 @@
+### You can change environment variables below
+GLOBAL:
+  ENVIRONMENT: "dev"
+  NAMESPACE: "sinclair"
+  KUBE_NAMESPACE: "sinclair"
+  PORT: 80
