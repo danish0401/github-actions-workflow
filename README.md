@@ -1,4 +1,3 @@
-[![Quality Gate Status](http://sonarqube.zm.private/api/project_badges/measure?project=admanager-front&metric=alert_status&token=squ_a0128817e37be28c47ab49f17c3ff2761a355627)](http://sonarqube.zm.private/dashboard?id=admanager-front)
 
 # Self Serve For Agencies Client
 
