@@ -72,7 +72,7 @@ jobs:
 
       - name: Setup helmfile
         continue-on-error: true
-        uses: mamezou-tech/setup-helmfile@v1.0.0
+        uses: mamezou-tech/setup-helmfile@v1.3.0
         with:
           kubectl-version: ${{ env.KUBECTL_VERSION }}
           helm-version: v3.8.2
