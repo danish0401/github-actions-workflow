@@ -54,12 +54,12 @@ jobs:
       HELMFILEPATH: "ci-configs/helm/${{ inputs.namespace }}/helm"
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4.1.1
         with:
           fetch-depth: 0
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4.0.1
         with:
           ## aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
           # aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
@@ -68,7 +68,7 @@ jobs:
 
       - name: Login to Amazon ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: aws-actions/amazon-ecr-login@v2.0.1
 
       - name: Setup helmfile
         continue-on-error: true
