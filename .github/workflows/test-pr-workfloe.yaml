@@ -1,4 +1,4 @@
-name: Visit-View App Workflow
+name: App Workflow
 
 on:
   workflow_dispatch:
@@ -8,10 +8,6 @@ on:
         required: true
         type: string
         default: '123'  # Example default PR number, can be updated or left blank
-      branch:
-        description: 'Branch name for reference'
-        required: true
-        default: 'feature-branch'
       service:
         description: 'Name of the service'
         required: true
