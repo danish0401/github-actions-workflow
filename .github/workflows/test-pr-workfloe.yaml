@@ -1,0 +1,42 @@
+name: Visit-View App Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      PR_NUMBERS:
+        description: 'Comma-separated list of open PR numbers'
+        required: true
+        type: string
+
+jobs:
+  prepare-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Set up matrix for PR numbers
+        id: set-matrix
+        run: |
+          pr_numbers=${{ github.event.inputs.PR_NUMBERS }}
+          matrix=$(echo $pr_numbers | awk -v RS=, '{print "{\"PR_NUMBER\": \"" $1 "\"}"}' | jq -s .)
+          echo "matrix=$matrix" >> $GITHUB_ENV
+        env:
+          GITHUB_ENV: ${{ github.env }}
+
+  trigger-argo-app-deletion:
+    needs: prepare-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        pr: ${{ fromJson(needs.prepare-matrix.outputs.matrix) }}
+    steps:
+      - name: Trigger Argo app delete
+        id: check-pr
+        run: |
+            echo ${{ matrix.pr.PR_NUMBER }}
+        # uses: DexCare/common/.github/workflows/reusable-argo-app-delete.yaml@INFRA-asasas/saasasa
+        # with:
+        #   SERVICE: visit-view
+        #   PR_NUMBER: ${{ matrix.pr.PR_NUMBER }}
+        # secrets:
+        #   ARGO_CD_FROSH_TOKEN: ${{ secrets.ARGO_CD_FROSH_TOKEN }}
