@@ -1,34 +1,34 @@
-name:  App Workflow
+name: Visit-View App Workflow
 
 on:
-    workflow_dispatch:
+  workflow_dispatch:
     inputs:
-        PR_NUMBER:
+      PR_NUMBER:
         description: 'Enter the PR number to process'
         required: true
         type: string
         default: '123'  # Example default PR number, can be updated or left blank
-        branch:
+      branch:
         description: 'Branch name for reference'
         required: true
-        default: 'test-pr'
-        service:
+        default: 'feature-branch'
+      service:
         description: 'Name of the service'
         required: true
         default: 'visit-view'
 
 jobs:
-    trigger-argo-app-deletion:
-        runs-on: ubuntu-latest
-        steps:
-          - name: Trigger Argo app delete
-            id: check-pr
-            run: |
-                  echo ${{ github.event.inputs.service }}
-                  echo ${{ github.event.inputs.PR_NUMBER }}
+  trigger-argo-app-deletion:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Argo app delete
+        id: app-del
+        run: | 
+            echo ${{ github.event.inputs.service }}
+            echo ${{ github.event.inputs.PR_NUMBER }}
         # uses: DexCare/common/.github/workflows/reusable-argo-app-delete.yaml@INFRA-asasas/saasasa
         # with:
-        #   SERVICE: visit-view
-        #   PR_NUMBER: ${{ matrix.pr.PR_NUMBER }}
+        #   SERVICE: ${{ github.event.inputs.service }}
+        #   PR_NUMBER: ${{ github.event.inputs.PR_NUMBER }}
         # secrets:
         #   ARGO_CD_FROSH_TOKEN: ${{ secrets.ARGO_CD_FROSH_TOKEN }}
