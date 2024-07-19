@@ -1,39 +1,31 @@
-name: Visit-View App Workflow
+name:  App Workflow
 
 on:
-  workflow_dispatch:
+    workflow_dispatch:
     inputs:
-      PR_NUMBERS:
-        description: 'Comma-separated list of open PR numbers'
+        PR_NUMBER:
+        description: 'Enter the PR number to process'
         required: true
         type: string
+        default: '123'  # Example default PR number, can be updated or left blank
+        branch:
+        description: 'Branch name for reference'
+        required: true
+        default: 'test-pr'
+        service:
+        description: 'Name of the service'
+        required: true
+        default: 'visit-view'
 
 jobs:
-  prepare-matrix:
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
-    steps:
-      - name: Set up matrix for PR numbers
-        id: set-matrix
-        run: |
-          pr_numbers=${{ github.event.inputs.PR_NUMBERS }}
-          matrix=$(echo $pr_numbers | awk -v RS=, '{print "{\"PR_NUMBER\": \"" $1 "\"}"}' | jq -s .)
-          echo "matrix=$matrix" >> $GITHUB_ENV
-        env:
-          GITHUB_ENV: ${{ github.env }}
-
-  trigger-argo-app-deletion:
-    needs: prepare-matrix
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        pr: ${{ fromJson(needs.prepare-matrix.outputs.matrix) }}
-    steps:
-      - name: Trigger Argo app delete
-        id: check-pr
-        run: |
-            echo ${{ matrix.pr.PR_NUMBER }}
+    trigger-argo-app-deletion:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Trigger Argo app delete
+            id: check-pr
+            run: |
+                  echo ${{ github.event.inputs.service }}
+                  echo ${{ github.event.inputs.PR_NUMBER }}
         # uses: DexCare/common/.github/workflows/reusable-argo-app-delete.yaml@INFRA-asasas/saasasa
         # with:
         #   SERVICE: visit-view
