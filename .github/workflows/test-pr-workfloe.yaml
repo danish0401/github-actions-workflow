@@ -1,4 +1,4 @@
-name: App Workflow
+name: Delete Orphaned PRs Argo Applications
 
 on:
   workflow_dispatch:
